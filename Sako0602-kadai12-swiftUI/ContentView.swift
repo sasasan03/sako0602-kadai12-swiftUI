@@ -57,8 +57,8 @@ struct ContentView: View {
     
     func calculation() {
         let unwrappedNonTaxPrice = Double(nonTaxPriceText) ?? 0
-        let unwrappedTaxRate = Double(taxNumText) ?? 0
-        let taxRate = (unwrappedTaxRate + 100) / 100
+        let unwrappedTaxNumText = Double(taxNumText) ?? 0
+        let taxRate = (unwrappedTaxNumText + 100) / 100
         totalPrice = Int(unwrappedNonTaxPrice * taxRate)
     }
     
