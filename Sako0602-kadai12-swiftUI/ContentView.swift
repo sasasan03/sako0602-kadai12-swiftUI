@@ -25,6 +25,7 @@ struct ContentView: View {
                 Text("円")
             }
             .padding()
+
             HStack{
                 Text("消費税率")
                 TextField("", text: $taxNumText)
@@ -35,11 +36,13 @@ struct ContentView: View {
                 Text("%")
             }
             .padding()
+
             Button("計算"){
                 calculation()
                 UserDefaults.standard.set(taxNumText, forKey: "TaxNumText")
             }
             .padding()
+            
             HStack{
                 Text("税込金額")
                 Text("\(totalPrice)")
@@ -55,7 +58,7 @@ struct ContentView: View {
         }
     }
     
-    func calculation() {
+    private func calculation() {
         let unwrappedNonTaxPrice = Double(nonTaxPriceText) ?? 0
         let unwrappedTaxNumText = Double(taxNumText) ?? 0
         let taxRate = (unwrappedTaxNumText + 100) / 100
