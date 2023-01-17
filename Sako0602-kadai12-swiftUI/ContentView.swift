@@ -14,6 +14,8 @@ struct ContentView: View {
     @State private var taxNumText = ""
     @State private var totalPrice = 0
     
+    let KeyZeiritsu = "zeiritsu"
+    
     var body: some View {
         VStack {
             HStack{
@@ -25,21 +27,23 @@ struct ContentView: View {
                 Text("円")
             }
             .padding()
+            
             HStack{
                 Text("消費税率")
                 TextField("", text: $taxNumText)
                     .keyboardType(.numberPad)
                     .frame(width: 70,height: 30)
                     .border(Color.black)
-                
                 Text("%")
             }
             .padding()
+            
             Button("計算"){
                 calculation()
-                UserDefaults.standard.set(taxNumText, forKey: "TaxNumText")
+                UserDefaults.standard.set(taxNumText, forKey: KeyZeiritsu )
             }
             .padding()
+            
             HStack{
                 Text("税込金額")
                 Text("\(totalPrice)")
@@ -47,7 +51,10 @@ struct ContentView: View {
             }
             .padding()
             .onAppear(){
-                guard let storageTaxNumText = UserDefaults.standard.string(forKey: "TaxNumText") else {
+                //UserDefaults.standard.string()だけだと適切に保存できていない場合がある。
+                //３つなど複数保存したい場合はset関数をよび、１回synchronize()を呼ぶ。
+                //synchronize()確実に保存したい場合に呼ぶ。
+                guard let storageTaxNumText = UserDefaults.standard.string(forKey: KeyZeiritsu ) ,UserDefaults.standard.synchronize() else {
                     return
                 }
                 taxNumText = storageTaxNumText
@@ -55,7 +62,7 @@ struct ContentView: View {
         }
     }
     
-    func calculation() {
+  private  func calculation() {
         let unwrappedNonTaxPrice = Double(nonTaxPriceText) ?? 0
         let unwrappedTaxNumText = Double(taxNumText) ?? 0
         let taxRate = (unwrappedTaxNumText + 100) / 100
